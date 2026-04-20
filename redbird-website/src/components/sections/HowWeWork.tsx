@@ -27,14 +27,22 @@ const STEPS = [
   },
 ];
 
+const RULED_LINES = `repeating-linear-gradient(
+  to bottom,
+  transparent 0,
+  transparent 31px,
+  rgba(110, 140, 155, 0.28) 31px,
+  rgba(110, 140, 155, 0.28) 32px
+)`;
+
 export default function HowWeWork() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const deskRef = useRef<HTMLDivElement | null>(null);
   const titleRef = useRef<HTMLDivElement | null>(null);
-  const step1Ref = useRef<HTMLDivElement | null>(null);
-  const step2Ref = useRef<HTMLDivElement | null>(null);
-  const step3Ref = useRef<HTMLDivElement | null>(null);
-  const step4Ref = useRef<HTMLDivElement | null>(null);
+  const step1Ref = useRef<HTMLLIElement | null>(null);
+  const step2Ref = useRef<HTMLLIElement | null>(null);
+  const step3Ref = useRef<HTMLLIElement | null>(null);
+  const step4Ref = useRef<HTMLLIElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const panelContentRef = useRef<HTMLDivElement | null>(null);
 
@@ -73,72 +81,105 @@ export default function HowWeWork() {
         />
       </div>
 
-      {/* Desktop / tablet: pinned notebook overlay + glass panel. Mobile: document flow. */}
-      <div className="relative z-10 flex min-h-screen w-full flex-col gap-8 px-6 py-16 md:h-screen md:flex-row md:items-center md:justify-between md:gap-12 md:px-12 lg:px-20">
-        {/* Notebook page overlay */}
+      <div className="relative z-10 flex min-h-screen w-full flex-col items-center gap-10 px-6 py-16 md:h-screen md:flex-row md:items-center md:justify-center md:gap-10 md:px-12 lg:gap-16 lg:px-20">
+        {/* Styled HTML notebook page */}
         <div
-          className="w-full max-w-[520px] rounded-card bg-[rgba(250,248,243,0.72)] p-7 shadow-[0_8px_24px_-10px_rgba(0,0,0,0.18)] md:w-[44%] md:max-w-none md:ml-[4%]"
+          className="relative w-full max-w-[480px] shrink-0 md:w-[460px] lg:w-[500px]"
           style={{
-            backdropFilter: "blur(2px)",
-            WebkitBackdropFilter: "blur(2px)",
-            border: "1px solid rgba(255,255,255,0.45)",
+            transform: "rotate(-2deg)",
+            transformOrigin: "center center",
           }}
         >
           <div
-            ref={titleRef}
-            className="inline-block font-handwriting text-[28px] font-medium leading-none text-brand-ink"
+            className="relative rounded-[3px] pl-12 pr-8 py-10"
             style={{
-              clipPath: "inset(0 0% 0 0)",
-              WebkitClipPath: "inset(0 0% 0 0)",
-              borderBottom: "2px solid rgba(26,26,46,0.85)",
-              paddingBottom: "4px",
+              backgroundColor: "#FDFAF0",
+              backgroundImage: RULED_LINES,
+              backgroundPosition: "0 44px",
+              boxShadow:
+                "0 18px 40px -12px rgba(0,0,0,0.35), 0 4px 10px -4px rgba(0,0,0,0.2)",
             }}
           >
-            The Redbird Way
-          </div>
+            {/* Spiral binding */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-4 left-2 flex flex-col items-center justify-between"
+            >
+              {Array.from({ length: 12 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="block h-2.5 w-2.5 rounded-full"
+                  style={{
+                    backgroundColor: "#2a2a2e",
+                    boxShadow:
+                      "inset 0 -1px 1px rgba(255,255,255,0.25), 0 1px 1px rgba(0,0,0,0.3)",
+                  }}
+                />
+              ))}
+            </div>
 
-          <ol className="mt-6 space-y-5">
-            {STEPS.map((s, i) => (
-              <li key={s.name} ref={stepRefs[i]} className="font-handwriting leading-tight">
-                <div
-                  data-fill
-                  className="inline-block text-[22px] text-brand-ink"
-                  style={{
-                    clipPath: "inset(0 0% 0 0)",
-                    WebkitClipPath: "inset(0 0% 0 0)",
-                  }}
+            <div
+              ref={titleRef}
+              className="inline-block font-handwriting text-[30px] font-medium leading-none text-brand-ink"
+              style={{
+                clipPath: "inset(0 0% 0 0)",
+                WebkitClipPath: "inset(0 0% 0 0)",
+                borderBottom: "2px solid rgba(26,26,46,0.9)",
+                paddingBottom: "4px",
+              }}
+            >
+              The Redbird Way
+            </div>
+
+            <ol className="mt-6 space-y-5">
+              {STEPS.map((s, i) => (
+                <li
+                  key={s.name}
+                  ref={stepRefs[i]}
+                  className="font-handwriting leading-tight"
                 >
-                  <span className="font-medium text-brand-raspberry">{s.n} </span>
-                  <span className="font-medium">{s.name}</span>
-                </div>
-                <div
-                  data-fill
-                  className="mt-1 inline-block pl-5 text-[17px] text-brand-ink/85"
-                  style={{
-                    clipPath: "inset(0 0% 0 0)",
-                    WebkitClipPath: "inset(0 0% 0 0)",
-                    lineHeight: 1.35,
-                  }}
-                >
-                  {s.desc}
-                </div>
-              </li>
-            ))}
-          </ol>
+                  <div
+                    data-fill
+                    className="inline-block text-[22px] text-brand-ink"
+                    style={{
+                      clipPath: "inset(0 0% 0 0)",
+                      WebkitClipPath: "inset(0 0% 0 0)",
+                    }}
+                  >
+                    <span className="font-medium text-brand-raspberry">
+                      {s.n}{" "}
+                    </span>
+                    <span className="font-medium">{s.name}</span>
+                  </div>
+                  <div
+                    data-fill
+                    className="mt-1 inline-block pl-5 text-[17px] text-brand-ink/85"
+                    style={{
+                      clipPath: "inset(0 0% 0 0)",
+                      WebkitClipPath: "inset(0 0% 0 0)",
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {s.desc}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
 
         {/* Glass copy panel */}
         <div
           ref={panelRef}
-          className="w-full max-w-[420px] md:w-[360px] md:max-w-none md:mr-[4%]"
+          className="w-full max-w-[420px] shrink-0 md:w-[360px] md:max-w-none"
           style={{
-            backgroundColor: "rgba(250, 248, 243, 0.78)",
+            backgroundColor: "rgba(250, 248, 243, 0.82)",
             backdropFilter: "blur(14px)",
             WebkitBackdropFilter: "blur(14px)",
-            border: "0.5px solid rgba(255, 255, 255, 0.6)",
+            border: "0.5px solid rgba(255, 255, 255, 0.7)",
             borderRadius: "12px",
             padding: "28px",
-            boxShadow: "0 6px 20px -6px rgba(0, 0, 0, 0.18)",
+            boxShadow: "0 6px 20px -6px rgba(0, 0, 0, 0.22)",
           }}
         >
           <div ref={panelContentRef}>

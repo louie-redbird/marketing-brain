@@ -71,9 +71,9 @@ export function useNotebookFillAnimation(refs: Refs) {
       gsap.set(desk, {
         transformOrigin: "50% 50%",
         force3D: true,
-        scale: 1.5,
-        xPercent: -15,
-        yPercent: -5,
+        scale: 1.1,
+        xPercent: 0,
+        yPercent: 0,
       });
       gsap.set([title, ...stepLines], {
         clipPath: HIDDEN_CLIP,
@@ -94,13 +94,13 @@ export function useNotebookFillAnimation(refs: Refs) {
         },
       });
 
-      // 0 - 0.15 camera pan/zoom
+      // 0 - 0.15 camera pan/zoom into empty desk centre
       tl.to(
         desk,
         {
-          scale: 1.75,
-          xPercent: -20,
-          yPercent: -5,
+          scale: 1.3,
+          xPercent: 0,
+          yPercent: 0,
           duration: 0.15,
           ease: "power2.inOut",
         },
@@ -159,6 +159,8 @@ export function useNotebookFillAnimation(refs: Refs) {
 
       // 0.90 - 1.0 hold (pin continues, nothing animates)
     }, section);
+
+    ScrollTrigger.refresh();
 
     return () => ctx.revert();
   }, [refs]);
