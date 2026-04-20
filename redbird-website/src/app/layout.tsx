@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 import "@fontsource/outfit/700.css";
 import "@fontsource/space-grotesk/400.css";
@@ -21,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-AU" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      </body>
     </html>
   );
 }
