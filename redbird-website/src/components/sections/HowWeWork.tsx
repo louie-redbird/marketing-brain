@@ -4,26 +4,44 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useNotebookFillAnimation } from "@/hooks/useNotebookFillAnimation";
 
-const STEPS = [
+type Step = {
+  n: string;
+  name: string;
+  descLines: [string, string];
+};
+
+const STEPS: Step[] = [
   {
     n: "1.",
     name: "Audit",
-    desc: "Map your current marketing, customers, and competitors. Find the gaps.",
+    descLines: [
+      "Map your current marketing, customers,",
+      "and competitors. Find the gaps.",
+    ],
   },
   {
     n: "2.",
     name: "Strategy",
-    desc: "Design a 90-day plan with clear targets and channels. No fluff.",
+    descLines: [
+      "Design a 90-day plan with clear targets",
+      "and channels. No fluff.",
+    ],
   },
   {
     n: "3.",
     name: "Build",
-    desc: "Execute across SEO, ads, content, email, automation. AI-accelerated.",
+    descLines: [
+      "Execute across SEO, ads, content, email,",
+      "automation. AI-accelerated.",
+    ],
   },
   {
     n: "4.",
     name: "Iterate",
-    desc: "Measure weekly, optimise monthly, scale what compounds.",
+    descLines: [
+      "Measure weekly, optimise monthly,",
+      "scale what compounds.",
+    ],
   },
 ];
 
@@ -35,27 +53,26 @@ const RULED_LINES = `repeating-linear-gradient(
   rgba(110, 140, 155, 0.28) 32px
 )`;
 
+const fillLineStyle: React.CSSProperties = {
+  display: "inline-block",
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  verticalAlign: "top",
+};
+
 export default function HowWeWork() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const deskRef = useRef<HTMLDivElement | null>(null);
-  const titleRef = useRef<HTMLDivElement | null>(null);
-  const step1Ref = useRef<HTMLLIElement | null>(null);
-  const step2Ref = useRef<HTMLLIElement | null>(null);
-  const step3Ref = useRef<HTMLLIElement | null>(null);
-  const step4Ref = useRef<HTMLLIElement | null>(null);
+  const titleRef = useRef<HTMLSpanElement | null>(null);
+  const stepsContainerRef = useRef<HTMLDivElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const panelContentRef = useRef<HTMLDivElement | null>(null);
-
-  const stepRefs = [step1Ref, step2Ref, step3Ref, step4Ref];
 
   useNotebookFillAnimation({
     sectionRef,
     deskRef,
     titleRef,
-    step1Ref,
-    step2Ref,
-    step3Ref,
-    step4Ref,
+    stepsContainerRef,
     panelRef,
     panelContentRef,
   });
@@ -81,21 +98,18 @@ export default function HowWeWork() {
         />
       </div>
 
-      <div className="relative z-10 flex min-h-screen w-full flex-col items-center gap-10 px-6 py-16 md:h-screen md:flex-row md:items-center md:justify-center md:gap-10 md:px-12 lg:gap-16 lg:px-20">
+      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-10 px-6 py-16 md:h-screen md:flex-row md:gap-10 md:px-12 lg:gap-16 lg:px-20">
         {/* Styled HTML notebook page */}
         <div
-          className="relative w-full max-w-[480px] shrink-0 md:w-[460px] lg:w-[500px]"
-          style={{
-            transform: "rotate(-2deg)",
-            transformOrigin: "center center",
-          }}
+          className="relative w-full max-w-[500px] shrink-0 md:w-[480px] lg:w-[520px]"
+          style={{ transform: "rotate(-2deg)", transformOrigin: "center" }}
         >
           <div
-            className="relative rounded-[3px] pl-12 pr-8 py-10"
+            className="relative rounded-[3px] pl-14 pr-8 py-10"
             style={{
               backgroundColor: "#FDFAF0",
               backgroundImage: RULED_LINES,
-              backgroundPosition: "0 44px",
+              backgroundPosition: "0 48px",
               boxShadow:
                 "0 18px 40px -12px rgba(0,0,0,0.35), 0 4px 10px -4px rgba(0,0,0,0.2)",
             }}
@@ -103,7 +117,7 @@ export default function HowWeWork() {
             {/* Spiral binding */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-y-4 left-2 flex flex-col items-center justify-between"
+              className="pointer-events-none absolute inset-y-4 left-3 flex flex-col items-center justify-between"
             >
               {Array.from({ length: 12 }).map((_, i) => (
                 <span
@@ -118,53 +132,59 @@ export default function HowWeWork() {
               ))}
             </div>
 
+            {/* Title */}
             <div
-              ref={titleRef}
-              className="inline-block font-handwriting text-[30px] font-medium leading-none text-brand-ink"
+              className="font-handwriting text-[30px] font-medium leading-none text-brand-ink"
               style={{
-                clipPath: "inset(0 0% 0 0)",
-                WebkitClipPath: "inset(0 0% 0 0)",
                 borderBottom: "2px solid rgba(26,26,46,0.9)",
                 paddingBottom: "4px",
+                display: "inline-block",
               }}
             >
-              The Redbird Way
+              <span ref={titleRef} style={fillLineStyle}>
+                The Redbird Way
+              </span>
             </div>
 
-            <ol className="mt-6 space-y-5">
-              {STEPS.map((s, i) => (
-                <li
+            {/* Steps */}
+            <div ref={stepsContainerRef} className="mt-6 space-y-5">
+              {STEPS.map((s) => (
+                <div
                   key={s.name}
-                  ref={stepRefs[i]}
-                  className="font-handwriting leading-tight"
+                  className="font-handwriting leading-tight text-brand-ink"
                 >
-                  <div
+                  {/* Line 1: number + name */}
+                  <span
                     data-fill
-                    className="inline-block text-[22px] text-brand-ink"
-                    style={{
-                      clipPath: "inset(0 0% 0 0)",
-                      WebkitClipPath: "inset(0 0% 0 0)",
-                    }}
+                    style={fillLineStyle}
+                    className="text-[24px]"
                   >
                     <span className="font-medium text-brand-raspberry">
-                      {s.n}{" "}
-                    </span>
+                      {s.n}
+                    </span>{" "}
                     <span className="font-medium">{s.name}</span>
-                  </div>
-                  <div
+                  </span>
+                  <br />
+                  {/* Line 2: desc part 1 */}
+                  <span
                     data-fill
-                    className="mt-1 inline-block pl-5 text-[17px] text-brand-ink/85"
-                    style={{
-                      clipPath: "inset(0 0% 0 0)",
-                      WebkitClipPath: "inset(0 0% 0 0)",
-                      lineHeight: 1.35,
-                    }}
+                    style={{ ...fillLineStyle, marginLeft: "1.5rem" }}
+                    className="mt-1 text-[17px] text-brand-ink/85"
                   >
-                    {s.desc}
-                  </div>
-                </li>
+                    {s.descLines[0]}
+                  </span>
+                  <br />
+                  {/* Line 3: desc part 2 */}
+                  <span
+                    data-fill
+                    style={{ ...fillLineStyle, marginLeft: "1.5rem" }}
+                    className="text-[17px] text-brand-ink/85"
+                  >
+                    {s.descLines[1]}
+                  </span>
+                </div>
               ))}
-            </ol>
+            </div>
           </div>
         </div>
 
