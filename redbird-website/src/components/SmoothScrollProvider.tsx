@@ -19,7 +19,7 @@ export default function SmoothScrollProvider({
 
     if (reduceMotion) return;
 
-    const lenis = new Lenis({ duration: 1.2 });
+    const lenis = new Lenis({ duration: 1.2, autoRaf: false });
 
     const onScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onScroll);
