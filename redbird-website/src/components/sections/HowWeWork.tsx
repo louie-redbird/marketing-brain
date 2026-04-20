@@ -48,9 +48,9 @@ const STEPS: Step[] = [
 const RULED_LINES = `repeating-linear-gradient(
   to bottom,
   transparent 0,
-  transparent 31px,
-  rgba(110, 140, 155, 0.28) 31px,
-  rgba(110, 140, 155, 0.28) 32px
+  transparent 27px,
+  rgba(110, 140, 155, 0.28) 27px,
+  rgba(110, 140, 155, 0.28) 28px
 )`;
 
 const fillLineStyle: React.CSSProperties = {
@@ -58,6 +58,7 @@ const fillLineStyle: React.CSSProperties = {
   overflow: "hidden",
   whiteSpace: "nowrap",
   verticalAlign: "top",
+  listStyle: "none",
 };
 
 export default function HowWeWork() {
@@ -98,45 +99,27 @@ export default function HowWeWork() {
         />
       </div>
 
-      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-10 px-6 py-16 md:h-screen md:flex-row md:gap-10 md:px-12 lg:gap-16 lg:px-20">
+      <div className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center gap-8 px-6 py-12 md:h-screen md:flex-row md:gap-6 md:px-8 lg:gap-12 lg:px-16">
         {/* Notebook */}
         <div
-          className="relative w-full max-w-[500px] shrink-0 md:w-[480px] lg:w-[520px]"
+          className="relative w-full max-w-[460px] shrink-0 md:w-[400px] lg:w-[460px]"
           style={{ transform: "rotate(-2deg)", transformOrigin: "center" }}
         >
           <div
-            className="relative rounded-[3px] pl-14 pr-8 py-10"
+            className="relative rounded-[3px] px-9 py-6"
             style={{
               backgroundColor: "#FDFAF0",
               backgroundImage: RULED_LINES,
-              backgroundPosition: "0 48px",
+              backgroundPosition: "0 42px",
               boxShadow:
                 "0 18px 40px -12px rgba(0,0,0,0.35), 0 4px 10px -4px rgba(0,0,0,0.2)",
             }}
           >
             <div
-              aria-hidden
-              className="pointer-events-none absolute inset-y-4 left-3 flex flex-col items-center justify-between"
-            >
-              {Array.from({ length: 12 }).map((_, i) => (
-                <span
-                  key={i}
-                  className="block h-2.5 w-2.5 rounded-full"
-                  style={{
-                    backgroundColor: "#2a2a2e",
-                    boxShadow:
-                      "inset 0 -1px 1px rgba(255,255,255,0.25), 0 1px 1px rgba(0,0,0,0.3)",
-                  }}
-                />
-              ))}
-            </div>
-
-            {/* Title */}
-            <div
-              className="font-handwriting text-[30px] font-medium leading-none text-brand-ink"
+              className="font-handwriting text-[26px] font-medium leading-none text-brand-ink"
               style={{
                 borderBottom: "2px solid rgba(26,26,46,0.9)",
-                paddingBottom: "4px",
+                paddingBottom: "3px",
                 display: "inline-block",
               }}
             >
@@ -145,13 +128,13 @@ export default function HowWeWork() {
               </span>
             </div>
 
-            <div ref={stepsContainerRef} className="mt-6 space-y-5">
+            <div ref={stepsContainerRef} className="mt-4 space-y-3">
               {STEPS.map((s) => (
                 <div
                   key={s.name}
                   className="font-handwriting leading-tight text-brand-ink"
                 >
-                  <span data-fill style={fillLineStyle} className="text-[24px]">
+                  <span data-fill style={fillLineStyle} className="text-[20px]">
                     <span className="font-medium text-brand-raspberry">
                       {s.n}
                     </span>{" "}
@@ -160,16 +143,16 @@ export default function HowWeWork() {
                   <br />
                   <span
                     data-fill
-                    style={{ ...fillLineStyle, marginLeft: "1.5rem" }}
-                    className="text-[17px] text-brand-ink/85"
+                    style={{ ...fillLineStyle, marginLeft: "1.25rem" }}
+                    className="text-[15px] text-brand-ink/85"
                   >
                     {s.descLines[0]}
                   </span>
                   <br />
                   <span
                     data-fill
-                    style={{ ...fillLineStyle, marginLeft: "1.5rem" }}
-                    className="text-[17px] text-brand-ink/85"
+                    style={{ ...fillLineStyle, marginLeft: "1.25rem" }}
+                    className="text-[15px] text-brand-ink/85"
                   >
                     {s.descLines[1]}
                   </span>
@@ -182,14 +165,14 @@ export default function HowWeWork() {
         {/* Glass panel */}
         <div
           ref={panelRef}
-          className="w-full max-w-[420px] shrink-0 md:w-[360px] md:max-w-none"
+          className="w-full max-w-[420px] shrink-0 md:w-[300px] lg:w-[340px]"
           style={{
             backgroundColor: "rgba(250, 248, 243, 0.82)",
             backdropFilter: "blur(14px)",
             WebkitBackdropFilter: "blur(14px)",
             border: "0.5px solid rgba(255, 255, 255, 0.7)",
             borderRadius: "12px",
-            padding: "28px",
+            padding: "24px",
             boxShadow: "0 6px 20px -6px rgba(0, 0, 0, 0.22)",
           }}
         >
@@ -204,30 +187,30 @@ export default function HowWeWork() {
             <h2
               data-panel-bit
               className="mt-2 font-display font-bold text-brand-charcoal"
-              style={{ fontSize: "22px", lineHeight: 1.2 }}
+              style={{ fontSize: "20px", lineHeight: 1.2 }}
             >
               Strategy first. Execution that compounds.
             </h2>
             <p
               data-panel-bit
-              className="mt-4 font-sans text-brand-charcoal/70"
-              style={{ fontSize: "14px", lineHeight: 1.6 }}
+              className="mt-3 font-sans text-brand-charcoal/70"
+              style={{ fontSize: "13px", lineHeight: 1.55 }}
             >
               AI handles the volume. We direct the thinking. Every plan starts
               with understanding your business — not a template.
             </p>
-            <div className="mt-6 flex flex-col gap-3">
+            <div className="mt-5 flex flex-col gap-2.5">
               <a
                 data-panel-bit
                 href="#"
-                className="inline-flex items-center justify-center rounded-pill bg-brand-raspberry px-5 py-3 font-sans text-[14px] font-medium text-white transition-colors hover:bg-brand-berry"
+                className="inline-flex items-center justify-center rounded-pill bg-brand-raspberry px-5 py-2.5 font-sans text-[13px] font-medium text-white transition-colors hover:bg-brand-berry"
               >
                 Get your 90-day plan
               </a>
               <a
                 data-panel-bit
                 href="#"
-                className="inline-flex items-center justify-center rounded-pill px-5 py-3 font-sans text-[14px] font-medium text-brand-charcoal transition-colors"
+                className="inline-flex items-center justify-center rounded-pill px-5 py-2.5 font-sans text-[13px] font-medium text-brand-charcoal transition-colors"
                 style={{
                   backgroundColor: "var(--color-brand-cream)",
                   border: "2px solid rgba(26, 26, 26, 0.85)",

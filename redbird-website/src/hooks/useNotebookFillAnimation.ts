@@ -17,6 +17,8 @@ type Refs = {
 
 const MOBILE_BREAKPOINT = 768;
 const DEV = process.env.NODE_ENV === "development";
+// Flip to false once the section is confirmed working end-to-end.
+const SHOW_MARKERS = DEV;
 
 export function useNotebookFillAnimation({
   sectionRef,
@@ -56,7 +58,7 @@ export function useNotebookFillAnimation({
 
     if (reduceMotion || isMobile) {
       fillTargets.forEach((el) => (el.style.width = "auto"));
-      gsap.set(panel, { scale: 1, opacity: 1 });
+      gsap.set(panel, { opacity: 1 });
       gsap.set(panelBits, { y: 0, opacity: 1 });
       if (DEV) console.log("[s2] reduced-motion or mobile, skipping pin");
       return;
@@ -69,6 +71,15 @@ export function useNotebookFillAnimation({
       naturalWidths.set(el, el.scrollWidth);
     });
 
+    if (DEV) {
+      const widthDump = fillTargets.map((el) => [
+        el.textContent?.trim().slice(0, 30),
+        naturalWidths.get(el),
+      ]);
+      console.log("[s2] measured widths:", widthDump);
+      console.log("[s2] fillTargets count:", fillTargets.length, "panelBits:", panelBits.length);
+    }
+
     const ctx = gsap.context(() => {
       gsap.set(desk, {
         transformOrigin: "50% 50%",
@@ -78,10 +89,10 @@ export function useNotebookFillAnimation({
       fillTargets.forEach((el) => {
         gsap.set(el, { width: 0 });
       });
-      gsap.set(panel, { scale: 0.95, opacity: 0, transformOrigin: "50% 50%" });
-      gsap.set(panelBits, { y: 10, opacity: 0 });
-
-      if (DEV) console.log("[s2] initial state applied");
+      // Panel: opacity only. Scaling a backdrop-filter element creates
+      // composite bugs in some browsers — stick to opacity.
+      gsap.set(panel, { opacity: 0 });
+      gsap.set(panelBits, { y: 8, opacity: 0 });
 
       let lastBucket = -1;
 
@@ -93,16 +104,15 @@ export function useNotebookFillAnimation({
           pin: true,
           scrub: 0.5,
           anticipatePin: 1,
-          markers: DEV,
+          markers: SHOW_MARKERS,
           onUpdate: DEV
             ? (self) => {
                 const bucket = Math.floor(self.progress * 10);
                 if (bucket !== lastBucket) {
                   lastBucket = bucket;
                   console.log(
-                    `[s2] scroll progress ~${bucket * 10}%`,
-                    "panel opacity:",
-                    gsap.getProperty(panel, "opacity")
+                    `[s2] scroll ${bucket * 10}% | panel opacity:`,
+                    Number(gsap.getProperty(panel, "opacity")).toFixed(2)
                   );
                 }
               }
@@ -110,23 +120,22 @@ export function useNotebookFillAnimation({
         },
       });
 
-      tl.to(
-        desk,
-        { scale: 1.3, duration: 0.15, ease: "power2.inOut" },
-        0
-      );
+      // 0.00 - 0.12: camera zoom into empty centre
+      tl.to(desk, { scale: 1.3, duration: 0.12, ease: "power2.inOut" }, 0);
 
+      // 0.12 - 0.18: title reveal
       tl.to(
         title,
-        { width: naturalWidths.get(title) ?? 0, duration: 0.05, ease: "none" },
-        0.15
+        { width: naturalWidths.get(title) ?? 0, duration: 0.06, ease: "none" },
+        0.12
       );
 
+      // Steps: 0.18-0.33, 0.33-0.45, 0.45-0.55, 0.55-0.62 (end by 0.62)
       const stepWindows = [
-        [0.2, 0.35],
-        [0.35, 0.5],
-        [0.5, 0.65],
-        [0.65, 0.75],
+        [0.18, 0.33],
+        [0.33, 0.45],
+        [0.45, 0.55],
+        [0.55, 0.62],
       ] as const;
 
       const linesPerStep = 3;
@@ -149,29 +158,31 @@ export function useNotebookFillAnimation({
         });
       });
 
-      tl.to(
-        panel,
-        { scale: 1, opacity: 1, duration: 0.07, ease: "power2.out" },
-        0.75
-      );
+      // 0.62 - 0.72: glass panel fades in (well within scroll range)
+      tl.to(panel, { opacity: 1, duration: 0.1, ease: "power2.out" }, 0.62);
 
+      // 0.72 - 0.90: panel content staggered
       tl.to(
         panelBits,
         {
           y: 0,
           opacity: 1,
-          duration: 0.08,
+          duration: 0.1,
           ease: "power2.out",
-          stagger: 0.015,
+          stagger: 0.03,
         },
-        0.82
+        0.72
       );
+
+      // 0.90 - 1.00: reader hold (no tweens; pin continues)
+      tl.to({}, { duration: 0.1 }, 0.9);
 
       if (DEV) {
         console.log(
           "[s2] ScrollTrigger registered:",
           ScrollTrigger.getAll().length,
-          "instances"
+          "| timeline duration:",
+          tl.duration().toFixed(3)
         );
       }
     }, section);
