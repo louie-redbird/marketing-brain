@@ -26,3 +26,18 @@ body {
   color: var(--color-brand-charcoal);
   font-family: var(--font-sans);
 }
+
+@keyframes scroll-cue-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.scroll-cue-chevron {
+  animation: scroll-cue-bounce 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue-chevron {
+    animation: none;
+  }
+}

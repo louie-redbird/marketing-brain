@@ -56,7 +56,10 @@ export default function Hero() {
         </button>
       </nav>
 
-      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+      <div
+        className="pointer-events-none absolute inset-x-0 z-10 flex justify-center"
+        style={{ top: "56%", transform: "translateY(-50%)" }}
+      >
         <div
           className="pointer-events-auto flex w-full max-w-[720px] flex-col items-center px-6 text-center"
           style={{ transform: "translateX(-3%)" }}
@@ -65,7 +68,8 @@ export default function Hero() {
             className="font-display font-bold tracking-tight text-brand-charcoal text-[42px] leading-[1.05] md:text-[56px] lg:text-[72px]"
             style={{ textShadow: "0 2px 8px rgba(0,0,0,0.12)" }}
           >
-            Your marketing, sorted.
+            <span className="block">Your marketing,</span>
+            <span className="block">sorted.</span>
           </h1>
 
           <div className="mt-8 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
@@ -80,7 +84,7 @@ export default function Hero() {
               className="inline-flex w-full items-center justify-center rounded-pill px-6 py-3.5 font-sans text-[15px] font-medium text-brand-charcoal transition-colors sm:w-auto"
               style={{
                 backgroundColor: "rgba(250, 250, 243, 0.55)",
-                border: "1.5px solid var(--color-brand-charcoal)",
+                border: "2px solid rgba(26, 26, 26, 0.85)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
               }}
@@ -91,15 +95,15 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-10 z-10 flex flex-col items-center gap-2 text-brand-charcoal/80">
+      <div className="pointer-events-none absolute inset-x-0 bottom-10 z-10 flex flex-col items-center gap-2 text-brand-charcoal/90">
         <span
-          className="font-sans text-[11px] font-medium uppercase"
-          style={{ letterSpacing: "0.6px" }}
+          className="font-sans text-[12px] font-medium uppercase"
+          style={{ letterSpacing: "0.8px" }}
         >
           Tour the workspace
         </span>
         <span aria-hidden className="block h-6 w-px bg-brand-charcoal/60" />
-        <ChevronDown size={16} strokeWidth={2} />
+        <ChevronDown size={16} strokeWidth={2} className="scroll-cue-chevron" />
       </div>
     </section>
   );
